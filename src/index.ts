@@ -1,36 +1,12 @@
 import { BigNumber } from '@ethersproject/bignumber';
-import { MaxInt256, MaxUint256 } from '@ethersproject/constants';
-import { TransactionResponse } from '@ethersproject/providers';
 import { arrayify, splitSignature } from '@ethersproject/bytes';
+import { MaxInt256, MaxUint256 } from '@ethersproject/constants';
 import { ContractTransaction } from '@ethersproject/contracts';
+import { TransactionResponse } from '@ethersproject/providers';
 import fetch from 'isomorphic-unfetch';
 import qs from 'qs';
 import { ETH_FAKE_ADDRESS, EXCHANGE_PROXY_ADDRESSES } from './constants';
 import { Erc20__factory } from './contracts';
-import {
-  ZeroExSdkOptions,
-  FetchPriceOrQuoteArgs,
-  SwapPrice,
-  RfqmPrice,
-  RfqmQuote,
-  SwapQuote,
-  PostRfqmTransactionSubmitSerializedResponse,
-  RfqmTransactionStatusResponse,
-  RfqmTypes,
-  ApproveTokenParams,
-  AllowanceParams,
-  RfqmTxStatusArgs,
-  FillRfqmOrderArgs,
-  FillOrderArgs,
-  SwapSourcesResponse,
-  SwapSourceParams,
-} from './types';
-import {
-  validateAmounts,
-  validateResponse,
-  getRootApiEndpoint,
-  verifyRfqmIsLiveOrThrow,
-} from './utils';
 import {
   ERROR_CHAIN_ID_REQUIRED,
   ERROR_CHAIN_ID_URL_REQUIRED,
@@ -38,6 +14,30 @@ import {
   ERROR_SIGNER_REQUIRED,
   ERROR_TX_HASH_REQUIRED,
 } from './errors';
+import {
+  AllowanceParams,
+  ApproveTokenParams,
+  FetchPriceOrQuoteArgs,
+  FillOrderArgs,
+  FillRfqmOrderArgs,
+  PostRfqmTransactionSubmitSerializedResponse,
+  RfqmPrice,
+  RfqmQuote,
+  RfqmTransactionStatusResponse,
+  RfqmTxStatusArgs,
+  RfqmTypes,
+  SwapPrice,
+  SwapQuote,
+  SwapSourceParams,
+  SwapSourcesResponse,
+  ZeroExSdkOptions,
+} from './types';
+import {
+  getRootApiEndpoint,
+  validateAmounts,
+  validateResponse,
+  verifyRfqmIsLiveOrThrow,
+} from './utils';
 
 class ZeroExSdk {
   private ZeroExSdkOptions?: ZeroExSdkOptions;
@@ -67,7 +67,13 @@ class ZeroExSdk {
     }
 
     const url = `${endpoint}/swap/v1/sources`;
-    const response = await fetchFn(url);
+    const response = await fetchFn(url, {
+      headers: {
+        ...(this.ZeroExSdkOptions?.apiKey && {
+          '0x-api-key': this.ZeroExSdkOptions?.apiKey,
+        }),
+      },
+    });
     await validateResponse(response);
     const data: SwapSourcesResponse = await response.json();
     return data;
@@ -115,7 +121,13 @@ class ZeroExSdk {
     }
 
     const url = `${endpoint}/swap/v1/price?${qs.stringify(params)}`;
-    const response = await fetchFn(url);
+    const response = await fetchFn(url, {
+      headers: {
+        ...(this.ZeroExSdkOptions?.apiKey && {
+          '0x-api-key': this.ZeroExSdkOptions?.apiKey,
+        }),
+      },
+    });
     await validateResponse(response);
     const data: SwapPrice = await response.json();
     return data;
@@ -163,7 +175,13 @@ class ZeroExSdk {
     }
 
     const url = `${endpoint}/swap/v1/quote?${qs.stringify(params)}`;
-    const response = await fetchFn(url);
+    const response = await fetchFn(url, {
+      headers: {
+        ...(this.ZeroExSdkOptions?.apiKey && {
+          '0x-api-key': this.ZeroExSdkOptions?.apiKey,
+        }),
+      },
+    });
 
     await validateResponse(response);
 
@@ -351,4 +369,5 @@ class ZeroExSdk {
   }
 }
 
-export { ZeroExSdk, EXCHANGE_PROXY_ADDRESSES };
+export { EXCHANGE_PROXY_ADDRESSES, ZeroExSdk };
+
