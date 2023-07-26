@@ -4,8 +4,8 @@ Object.defineProperty(exports, '__esModule', { value: true });
 
 function _interopDefault (ex) { return (ex && (typeof ex === 'object') && 'default' in ex) ? ex['default'] : ex; }
 
-var constants = require('@ethersproject/constants');
 var bytes = require('@ethersproject/bytes');
+var constants = require('@ethersproject/constants');
 var fetch$1 = _interopDefault(require('isomorphic-unfetch'));
 var qs = _interopDefault(require('qs'));
 var ethers = require('ethers');
@@ -614,6 +614,12 @@ var Erc20__factory = /*#__PURE__*/function () {
 }();
 Erc20__factory.abi = _abi;
 
+var ERROR_CHAIN_ID_URL_REQUIRED = 'A chainId is required if the ZeroExSdk class is constructed without an apiUrl.';
+var ERROR_CHAIN_ID_REQUIRED = 'No chainId provided!';
+var ERROR_QUOTE_REQUIRED = 'No quote data provided!';
+var ERROR_SIGNER_REQUIRED = 'No signer provided!';
+var ERROR_TX_HASH_REQUIRED = 'Transaction hash not provided!';
+
 var RfqmTypes;
 
 (function (RfqmTypes) {
@@ -758,12 +764,6 @@ var verifyRfqmIsLiveOrThrow = /*#__PURE__*/function () {
   };
 }();
 
-var ERROR_CHAIN_ID_URL_REQUIRED = 'A chainId is required if the ZeroExSdk class is constructed without an apiUrl.';
-var ERROR_CHAIN_ID_REQUIRED = 'No chainId provided!';
-var ERROR_QUOTE_REQUIRED = 'No quote data provided!';
-var ERROR_SIGNER_REQUIRED = 'No signer provided!';
-var ERROR_TX_HASH_REQUIRED = 'Transaction hash not provided!';
-
 var ZeroExSdk = /*#__PURE__*/function () {
   function ZeroExSdk(ZeroExSdkOptions) {
     this.ZeroExSdkOptions = ZeroExSdkOptions;
@@ -784,7 +784,7 @@ var ZeroExSdk = /*#__PURE__*/function () {
   /*#__PURE__*/
   function () {
     var _getSources = /*#__PURE__*/_asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee(_temp) {
-      var _this$ZeroExSdkOption;
+      var _this$ZeroExSdkOption, _this$ZeroExSdkOption2, _this$ZeroExSdkOption3;
 
       var _ref, chainId, _ref$fetchFn, fetchFn, endpoint, url, response, data;
 
@@ -805,7 +805,11 @@ var ZeroExSdk = /*#__PURE__*/function () {
             case 4:
               url = endpoint + "/swap/v1/sources";
               _context.next = 7;
-              return fetchFn(url);
+              return fetchFn(url, {
+                headers: _extends({}, ((_this$ZeroExSdkOption2 = this.ZeroExSdkOptions) == null ? void 0 : _this$ZeroExSdkOption2.apiKey) && {
+                  '0x-api-key': (_this$ZeroExSdkOption3 = this.ZeroExSdkOptions) == null ? void 0 : _this$ZeroExSdkOption3.apiKey
+                })
+              });
 
             case 7:
               response = _context.sent;
@@ -851,9 +855,9 @@ var ZeroExSdk = /*#__PURE__*/function () {
   /*#__PURE__*/
   function () {
     var _getIndicativePrice = /*#__PURE__*/_asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2(_ref2) {
-      var _this$ZeroExSdkOption2;
+      var _this$ZeroExSdkOption4, _this$ZeroExSdkOption7, _this$ZeroExSdkOption8;
 
-      var params, _ref2$resource, resource, chainId, _ref2$fetchFn, fetchFn, endpoint, _this$ZeroExSdkOption3, _this$ZeroExSdkOption4, _url, _response, _data, url, response, data;
+      var params, _ref2$resource, resource, chainId, _ref2$fetchFn, fetchFn, endpoint, _this$ZeroExSdkOption5, _this$ZeroExSdkOption6, _url, _response, _data, url, response, data;
 
       return _regeneratorRuntime().wrap(function _callee2$(_context2) {
         while (1) {
@@ -861,7 +865,7 @@ var ZeroExSdk = /*#__PURE__*/function () {
             case 0:
               params = _ref2.params, _ref2$resource = _ref2.resource, resource = _ref2$resource === void 0 ? 'swap' : _ref2$resource, chainId = _ref2.chainId, _ref2$fetchFn = _ref2.fetchFn, fetchFn = _ref2$fetchFn === void 0 ? fetch$1 : _ref2$fetchFn;
               validateAmounts(params);
-              endpoint = chainId ? getRootApiEndpoint(chainId) : (_this$ZeroExSdkOption2 = this.ZeroExSdkOptions) == null ? void 0 : _this$ZeroExSdkOption2.apiUrl;
+              endpoint = chainId ? getRootApiEndpoint(chainId) : (_this$ZeroExSdkOption4 = this.ZeroExSdkOptions) == null ? void 0 : _this$ZeroExSdkOption4.apiUrl;
 
               if (endpoint) {
                 _context2.next = 5;
@@ -880,8 +884,8 @@ var ZeroExSdk = /*#__PURE__*/function () {
               _url = endpoint + "/rfqm/v1/price?" + qs.stringify(params);
               _context2.next = 10;
               return fetchFn(_url, {
-                headers: _extends({}, ((_this$ZeroExSdkOption3 = this.ZeroExSdkOptions) == null ? void 0 : _this$ZeroExSdkOption3.apiKey) && {
-                  '0x-api-key': (_this$ZeroExSdkOption4 = this.ZeroExSdkOptions) == null ? void 0 : _this$ZeroExSdkOption4.apiKey
+                headers: _extends({}, ((_this$ZeroExSdkOption5 = this.ZeroExSdkOptions) == null ? void 0 : _this$ZeroExSdkOption5.apiKey) && {
+                  '0x-api-key': (_this$ZeroExSdkOption6 = this.ZeroExSdkOptions) == null ? void 0 : _this$ZeroExSdkOption6.apiKey
                 })
               });
 
@@ -901,7 +905,11 @@ var ZeroExSdk = /*#__PURE__*/function () {
             case 17:
               url = endpoint + "/swap/v1/price?" + qs.stringify(params);
               _context2.next = 20;
-              return fetchFn(url);
+              return fetchFn(url, {
+                headers: _extends({}, ((_this$ZeroExSdkOption7 = this.ZeroExSdkOptions) == null ? void 0 : _this$ZeroExSdkOption7.apiKey) && {
+                  '0x-api-key': (_this$ZeroExSdkOption8 = this.ZeroExSdkOptions) == null ? void 0 : _this$ZeroExSdkOption8.apiKey
+                })
+              });
 
             case 20:
               response = _context2.sent;
@@ -947,9 +955,9 @@ var ZeroExSdk = /*#__PURE__*/function () {
   /*#__PURE__*/
   function () {
     var _getFirmQuote = /*#__PURE__*/_asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee3(_ref3) {
-      var _this$ZeroExSdkOption5;
+      var _this$ZeroExSdkOption9, _this$ZeroExSdkOption12, _this$ZeroExSdkOption13;
 
-      var params, _ref3$resource, resource, chainId, _ref3$fetchFn, fetchFn, endpoint, _this$ZeroExSdkOption6, _this$ZeroExSdkOption7, _url2, _response2, _data2, url, response, data;
+      var params, _ref3$resource, resource, chainId, _ref3$fetchFn, fetchFn, endpoint, _this$ZeroExSdkOption10, _this$ZeroExSdkOption11, _url2, _response2, _data2, url, response, data;
 
       return _regeneratorRuntime().wrap(function _callee3$(_context3) {
         while (1) {
@@ -957,7 +965,7 @@ var ZeroExSdk = /*#__PURE__*/function () {
             case 0:
               params = _ref3.params, _ref3$resource = _ref3.resource, resource = _ref3$resource === void 0 ? 'swap' : _ref3$resource, chainId = _ref3.chainId, _ref3$fetchFn = _ref3.fetchFn, fetchFn = _ref3$fetchFn === void 0 ? fetch$1 : _ref3$fetchFn;
               validateAmounts(params);
-              endpoint = chainId ? getRootApiEndpoint(chainId) : (_this$ZeroExSdkOption5 = this.ZeroExSdkOptions) == null ? void 0 : _this$ZeroExSdkOption5.apiUrl;
+              endpoint = chainId ? getRootApiEndpoint(chainId) : (_this$ZeroExSdkOption9 = this.ZeroExSdkOptions) == null ? void 0 : _this$ZeroExSdkOption9.apiUrl;
 
               if (endpoint) {
                 _context3.next = 5;
@@ -976,8 +984,8 @@ var ZeroExSdk = /*#__PURE__*/function () {
               _url2 = endpoint + "/rfqm/v1/quote?" + qs.stringify(params);
               _context3.next = 10;
               return fetchFn(_url2, {
-                headers: _extends({}, ((_this$ZeroExSdkOption6 = this.ZeroExSdkOptions) == null ? void 0 : _this$ZeroExSdkOption6.apiKey) && {
-                  '0x-api-key': (_this$ZeroExSdkOption7 = this.ZeroExSdkOptions) == null ? void 0 : _this$ZeroExSdkOption7.apiKey
+                headers: _extends({}, ((_this$ZeroExSdkOption10 = this.ZeroExSdkOptions) == null ? void 0 : _this$ZeroExSdkOption10.apiKey) && {
+                  '0x-api-key': (_this$ZeroExSdkOption11 = this.ZeroExSdkOptions) == null ? void 0 : _this$ZeroExSdkOption11.apiKey
                 })
               });
 
@@ -997,7 +1005,11 @@ var ZeroExSdk = /*#__PURE__*/function () {
             case 17:
               url = endpoint + "/swap/v1/quote?" + qs.stringify(params);
               _context3.next = 20;
-              return fetchFn(url);
+              return fetchFn(url, {
+                headers: _extends({}, ((_this$ZeroExSdkOption12 = this.ZeroExSdkOptions) == null ? void 0 : _this$ZeroExSdkOption12.apiKey) && {
+                  '0x-api-key': (_this$ZeroExSdkOption13 = this.ZeroExSdkOptions) == null ? void 0 : _this$ZeroExSdkOption13.apiKey
+                })
+              });
 
             case 20:
               response = _context3.sent;
@@ -1207,7 +1219,7 @@ var ZeroExSdk = /*#__PURE__*/function () {
   /*#__PURE__*/
   function () {
     var _fillRfqmOrder = /*#__PURE__*/_asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee7(_ref7) {
-      var _this$ZeroExSdkOption8, _this$ZeroExSdkOption9, _this$ZeroExSdkOption10;
+      var _this$ZeroExSdkOption14, _this$ZeroExSdkOption15, _this$ZeroExSdkOption16;
 
       var quote, chainId, signer, _ref7$fetchFn, fetchFn, rawSignature, _splitSignature, v, r, s, unpackedSignedSignature, endpoint, url, body, response, data;
 
@@ -1237,7 +1249,7 @@ var ZeroExSdk = /*#__PURE__*/function () {
                 s: s,
                 signatureType: 3
               };
-              endpoint = chainId ? getRootApiEndpoint(chainId) : (_this$ZeroExSdkOption8 = this.ZeroExSdkOptions) == null ? void 0 : _this$ZeroExSdkOption8.apiUrl;
+              endpoint = chainId ? getRootApiEndpoint(chainId) : (_this$ZeroExSdkOption14 = this.ZeroExSdkOptions) == null ? void 0 : _this$ZeroExSdkOption14.apiUrl;
 
               if (endpoint) {
                 _context7.next = 11;
@@ -1256,8 +1268,8 @@ var ZeroExSdk = /*#__PURE__*/function () {
               _context7.next = 15;
               return fetchFn(url, {
                 method: 'POST',
-                headers: _extends({}, ((_this$ZeroExSdkOption9 = this.ZeroExSdkOptions) == null ? void 0 : _this$ZeroExSdkOption9.apiKey) && {
-                  '0x-api-key': (_this$ZeroExSdkOption10 = this.ZeroExSdkOptions) == null ? void 0 : _this$ZeroExSdkOption10.apiKey,
+                headers: _extends({}, ((_this$ZeroExSdkOption15 = this.ZeroExSdkOptions) == null ? void 0 : _this$ZeroExSdkOption15.apiKey) && {
+                  '0x-api-key': (_this$ZeroExSdkOption16 = this.ZeroExSdkOptions) == null ? void 0 : _this$ZeroExSdkOption16.apiKey,
                   'Content-Type': 'application/json'
                 }),
                 body: JSON.stringify(body)
@@ -1303,7 +1315,7 @@ var ZeroExSdk = /*#__PURE__*/function () {
   /*#__PURE__*/
   function () {
     var _getRfqmTxStatus = /*#__PURE__*/_asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee8(_ref8) {
-      var _this$ZeroExSdkOption11, _this$ZeroExSdkOption12, _this$ZeroExSdkOption13;
+      var _this$ZeroExSdkOption17, _this$ZeroExSdkOption18, _this$ZeroExSdkOption19;
 
       var txHash, chainId, _ref8$fetchFn, fetchFn, endpoint, statusUrl, response, data;
 
@@ -1321,7 +1333,7 @@ var ZeroExSdk = /*#__PURE__*/function () {
               throw new Error(ERROR_TX_HASH_REQUIRED);
 
             case 3:
-              endpoint = chainId ? getRootApiEndpoint(chainId) : (_this$ZeroExSdkOption11 = this.ZeroExSdkOptions) == null ? void 0 : _this$ZeroExSdkOption11.apiUrl;
+              endpoint = chainId ? getRootApiEndpoint(chainId) : (_this$ZeroExSdkOption17 = this.ZeroExSdkOptions) == null ? void 0 : _this$ZeroExSdkOption17.apiUrl;
 
               if (endpoint) {
                 _context8.next = 6;
@@ -1334,8 +1346,8 @@ var ZeroExSdk = /*#__PURE__*/function () {
               statusUrl = endpoint + "/rfqm/v1/status/" + txHash;
               _context8.next = 9;
               return fetchFn(statusUrl, {
-                headers: _extends({}, ((_this$ZeroExSdkOption12 = this.ZeroExSdkOptions) == null ? void 0 : _this$ZeroExSdkOption12.apiKey) && {
-                  '0x-api-key': (_this$ZeroExSdkOption13 = this.ZeroExSdkOptions) == null ? void 0 : _this$ZeroExSdkOption13.apiKey
+                headers: _extends({}, ((_this$ZeroExSdkOption18 = this.ZeroExSdkOptions) == null ? void 0 : _this$ZeroExSdkOption18.apiKey) && {
+                  '0x-api-key': (_this$ZeroExSdkOption19 = this.ZeroExSdkOptions) == null ? void 0 : _this$ZeroExSdkOption19.apiKey
                 })
               });
 

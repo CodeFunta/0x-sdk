@@ -1,8 +1,8 @@
 import { BigNumber } from '@ethersproject/bignumber';
-import { TransactionResponse } from '@ethersproject/providers';
 import { ContractTransaction } from '@ethersproject/contracts';
+import { TransactionResponse } from '@ethersproject/providers';
 import { EXCHANGE_PROXY_ADDRESSES } from './constants';
-import { ZeroExSdkOptions, FetchPriceOrQuoteArgs, SwapPrice, RfqmPrice, RfqmQuote, SwapQuote, PostRfqmTransactionSubmitSerializedResponse, RfqmTransactionStatusResponse, ApproveTokenParams, AllowanceParams, RfqmTxStatusArgs, FillRfqmOrderArgs, FillOrderArgs, SwapSourcesResponse, SwapSourceParams } from './types';
+import { AllowanceParams, ApproveTokenParams, FetchPriceOrQuoteArgs, FillOrderArgs, FillRfqmOrderArgs, PostRfqmTransactionSubmitSerializedResponse, RfqmPrice, RfqmQuote, RfqmTransactionStatusResponse, RfqmTxStatusArgs, SwapPrice, SwapQuote, SwapSourceParams, SwapSourcesResponse, ZeroExSdkOptions } from './types';
 declare class ZeroExSdk {
     private ZeroExSdkOptions?;
     constructor(ZeroExSdkOptions?: ZeroExSdkOptions);
@@ -87,4 +87,4 @@ declare class ZeroExSdk {
      */
     getRfqmTxStatus({ txHash, chainId, fetchFn, }: RfqmTxStatusArgs): Promise<RfqmTransactionStatusResponse>;
 }
-export { ZeroExSdk, EXCHANGE_PROXY_ADDRESSES };
+export { EXCHANGE_PROXY_ADDRESSES, ZeroExSdk };
