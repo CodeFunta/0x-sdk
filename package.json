@@ -34,7 +34,7 @@
   },
   "scripts": {
     "start": "tsdx watch",
-    "build": "tsdx build",
+    "build": "tsdx build && git add * && git commit -m \"update dist\" && yarn version --patch && git push --follow-tags",
     "test": "tsdx test -i",
     "lint": "tsdx lint",
     "prepare": "typechain --out-dir src/contracts --target=ethers-v5 'src/abis/**/*.json'; tsdx build",
